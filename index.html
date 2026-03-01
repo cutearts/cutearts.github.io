@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Supabase via Edge Function</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 30px;
+      background: #f9f9f9;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 60%;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    th {
+      background: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Secure Data (via Edge Function)</h2>
+
+<table id="data-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+  async function fetchData() {
+    const response = await fetch(
+      "https://whxibnbnqqgctfwnhnum.supabase.co/functions/v1/get-table18"
+    );
+
+    const data = await response.json();
+
+    const tableBody = document.querySelector("#data-table tbody");
+    tableBody.innerHTML = "";
+
+    if (!Array.isArray(data)) {
+      console.error(data);
+      return;
+    }
+
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+
+      const nameTd = document.createElement("td");
+      nameTd.textContent = row.name;
+
+      const numberTd = document.createElement("td");
+      numberTd.textContent = row.number;
+
+      tr.appendChild(nameTd);
+      tr.appendChild(numberTd);
+      tableBody.appendChild(tr);
+    });
+  }
+
+  fetchData();
+</script>
+
+</body>
+</html>
